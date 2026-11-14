@@ -22,8 +22,19 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x gradlew
 
+      - name: Debug gradlew
+        run: |
+          echo "=== gradlew head ==="
+          head -5 gradlew | od -c
+          echo "=== wrapper props ==="
+          cat gradle/wrapper/gradle-wrapper.properties | od -c
+          echo "=== java version ==="
+          java -version
+          echo "=== JAVA_HOME ==="
+          echo $JAVA_HOME
+
       - name: Build Debug APK
-        run: ./gradlew assembleDebug --no-daemon
+        run: ./gradlew assembleDebug --no-daemon --info --stacktrace 2>&1 | head -100
         env:
           GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx2g"
 
